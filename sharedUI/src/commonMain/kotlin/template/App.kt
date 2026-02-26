@@ -37,6 +37,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.adamglin.PhosphorIcons
 import com.adamglin.phosphoricons.Duotone
 import com.adamglin.phosphoricons.Fill
@@ -53,8 +54,12 @@ import com.adamglin.phosphoricons.fill.Play
 import com.adamglin.phosphoricons.fill.Plus
 import com.adamglin.phosphoricons.fill.Storefront
 import com.adamglin.phosphoricons.fill.UserFocus
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.zinc.chengdu.theme.AppTheme
 import org.zinc.chengdu.theme.LocalExtraColors
+import template.data.NetworkApi
+import template.screen.search.SearchViewModel
 import template.tab.chat.ChatTab
 import template.tab.home.HomeTab
 import template.tab.post.PostTab
@@ -69,7 +74,10 @@ import template.theme.component.TopBar
 fun App(
     onThemeChanged: @Composable (isDark: Boolean) -> Unit = {}
 ) = AppTheme(onThemeChanged) {
-    Navigator(screen = BottomTabContainer)
+    initKoin()
+    Navigator(screen = BottomTabContainer) { navigator ->
+        SlideTransition(navigator)
+    }
 }
 
 object BottomTabContainer: Screen {
@@ -154,4 +162,16 @@ private fun RowScope.TabNavigationItem(tab: Tab, icon: ImageVector, selectedIcon
             indicatorColor = Color.Transparent
         )
     )
+}
+
+val myModule = module {
+    single { SearchViewModel(NetworkApi()) }
+}
+
+fun initKoin() {
+    try {
+        startKoin {
+            modules(myModule)
+        }
+    } catch (e: Exception) {}
 }
