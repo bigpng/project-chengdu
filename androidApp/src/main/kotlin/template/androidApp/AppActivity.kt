@@ -1,4 +1,4 @@
-package org.kmp.template.androidApp
+package org.zinc.chengdu.androidApp
 
 import android.app.Activity
 import android.os.Bundle
@@ -8,13 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import org.kmp.template.App
+import template.App
 
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent { 
             App(onThemeChanged = { ThemeChanged(it) }) 
         }

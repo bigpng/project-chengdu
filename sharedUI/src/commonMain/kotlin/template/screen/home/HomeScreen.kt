@@ -1,4 +1,4 @@
-package org.kmp.template.screen.home
+package template.screen.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import org.kmp.template.screen.details.DetailsScreen
+import org.zinc.chengdu.screen.details.DetailsScreen
 
 class HomeScreen : Screen {
     @Composable

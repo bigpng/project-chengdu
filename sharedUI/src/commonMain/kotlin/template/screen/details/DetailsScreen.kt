@@ -1,4 +1,4 @@
-package org.kmp.template.screen.details
+package org.zinc.chengdu.screen.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

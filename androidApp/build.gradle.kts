@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "org.kmp.template.androidApp"
+    namespace = "org.zinc.chengdu.androidApp"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 23
         targetSdk = 36
 
-        applicationId = "org.kmp.template.androidApp"
+        applicationId = "org.zinc.chengdu.androidApp"
         versionCode = 1
         versionName = "1.0.0"
     }

@@ -1,4 +1,4 @@
-package org.kmp.template.theme
+package template.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -23,7 +23,7 @@ internal val ErrorLight = Color(0xFFBB152C)
 internal val OnErrorLight = Color(0xFFFFFFFF)
 internal val ErrorContainerLight = Color(0xFFFFDAD8)
 internal val OnErrorContainerLight = Color(0xFF410007)
-internal val BackgroundLight = Color(0xFFF9F9F9)
+internal val BackgroundLight = Color(0xFFDCE5D9)
 internal val OnBackgroundLight = Color(0xFF1A1C1C)
 internal val SurfaceLight = Color(0xFFF9F9F9)
 internal val OnSurfaceLight = Color(0xFF1A1C1C)
@@ -59,11 +59,11 @@ internal val ErrorDark = Color(0xFFFFB3B1)
 internal val OnErrorDark = Color(0xFF680011)
 internal val ErrorContainerDark = Color(0xFF92001C)
 internal val OnErrorContainerDark = Color(0xFFFFDAD8)
-internal val BackgroundDark = Color(0xFF121414)
+internal val BackgroundDark = Color(0xFF000000)
 internal val OnBackgroundDark = Color(0xFFE2E2E2)
-internal val SurfaceDark = Color(0xFF121414)
+internal val SurfaceDark = Color(0xFF243232)
 internal val OnSurfaceDark = Color(0xFFE2E2E2)
-internal val SurfaceVariantDark = Color(0xFF404941)
+internal val SurfaceVariantDark = Color(0xFF000000)
 internal val OnSurfaceVariantDark = Color(0xFFC0C9BE)
 internal val OutlineDark = Color(0xFF8A9389)
 internal val OutlineVariantDark = Color(0xFF404941)

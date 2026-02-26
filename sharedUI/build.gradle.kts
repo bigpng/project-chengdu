@@ -46,6 +46,8 @@ kotlin {
             implementation("cafe.adriel.voyager:voyager-tab-navigator:${voyagerVersion}")
             implementation("cafe.adriel.voyager:voyager-transitions:${voyagerVersion}")
             implementation("cafe.adriel.voyager:voyager-koin:${voyagerVersion}")
+            // Other
+            implementation("com.adamglin:phosphor-icon:1.0.0")
         }
 
         commonTest.dependencies {
@@ -81,7 +83,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 }
 android {
-    namespace = "org.kmp.template"
+    namespace = "org.zinc.chengdu"
     compileSdk = 36
     defaultConfig {
         minSdk = 23
