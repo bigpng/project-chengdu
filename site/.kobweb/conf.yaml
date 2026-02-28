@@ -1,0 +1,14 @@
+site:
+  title: "Tradefox"
+
+server:
+  files:
+    dev:
+      contentRoot: "build/processedResources/js/main/public"
+      script: "build/kotlin-webpack/js/developmentExecutable/chengdu.js"
+      api: "build/libs/chengdu.jar"
+    prod:
+      script: "build/kotlin-webpack/js/productionExecutable/chengdu.js"
+      siteRoot: ".kobweb/site"
+
+  port: 8080

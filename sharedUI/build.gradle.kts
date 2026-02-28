@@ -19,6 +19,10 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+//    js(IR) {
+//        browser()
+//    }
+
     sourceSets {
         commonMain.dependencies {
             api(libs.compose.runtime)
@@ -37,6 +41,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.coil)
+            implementation(libs.coil.network.ktor3)
             implementation(libs.multiplatformSettings)
             implementation(libs.kotlinx.datetime)
             // Voyager
@@ -48,6 +53,7 @@ kotlin {
             implementation("cafe.adriel.voyager:voyager-koin:${voyagerVersion}")
             // Other
             implementation("com.adamglin:phosphor-icon:1.0.0")
+            implementation("network.chaintech:compose-multiplatform-media-player:1.0.53")
         }
 
         commonTest.dependencies {

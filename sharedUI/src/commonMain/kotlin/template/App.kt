@@ -24,6 +24,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -42,30 +44,36 @@ import com.adamglin.PhosphorIcons
 import com.adamglin.phosphoricons.Duotone
 import com.adamglin.phosphoricons.Fill
 import com.adamglin.phosphoricons.duotone.AddressBook
-import com.adamglin.phosphoricons.duotone.ChatsTeardrop
 import com.adamglin.phosphoricons.duotone.HouseSimple
 import com.adamglin.phosphoricons.duotone.Play
-import com.adamglin.phosphoricons.duotone.Storefront
 import com.adamglin.phosphoricons.duotone.UserFocus
 import com.adamglin.phosphoricons.fill.AddressBook
-import com.adamglin.phosphoricons.fill.ChatsTeardrop
 import com.adamglin.phosphoricons.fill.HouseSimple
 import com.adamglin.phosphoricons.fill.Play
 import com.adamglin.phosphoricons.fill.Plus
-import com.adamglin.phosphoricons.fill.Storefront
 import com.adamglin.phosphoricons.fill.UserFocus
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.header
+import io.ktor.http.URLProtocol
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.yield
+import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.zinc.chengdu.theme.AppTheme
 import org.zinc.chengdu.theme.LocalExtraColors
+import template.component.NetVideoPlayerScreenModel
+import template.data.NetApi
 import template.data.NetworkApi
 import template.screen.search.SearchViewModel
 import template.tab.chat.ChatTab
 import template.tab.home.HomeTab
-import template.tab.post.PostTab
-import template.tab.shop.ShopTab
+import template.tab.home.HomeViewModel
 import template.tab.leads.LeadsTab
-import template.tab.notifs.NotifsTab
+import template.tab.post.PostTab
 import template.tab.profile.ProfileTab
 import template.theme.component.TopBar
 
@@ -80,12 +88,23 @@ fun App(
     }
 }
 
-object BottomTabContainer: Screen {
+object BottomTabContainer : Screen {
     @Composable
     override fun Content() {
+
+//         VIDEO:
+        val videoSm = koinScreenModel<NetVideoPlayerScreenModel>()
+        LaunchedEffect(Unit) {
+            coroutineScope {
+                yield()
+            }
+            videoSm.loadPlayer("".trim())
+        }
+
         TabNavigator(HomeTab) {
             Scaffold(
-                contentWindowInsets = WindowInsets(0, 0, 0, 0), topBar = { TopBar() },
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                topBar = { TopBar() },
                 bottomBar = {
                     NavigationBar(
                         containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -93,18 +112,29 @@ object BottomTabContainer: Screen {
                         modifier = Modifier.navigationBarsPadding().height(60.dp)
                     ) {
                         TabNavigationItem(
-                            HomeTab, PhosphorIcons.Duotone.HouseSimple, PhosphorIcons.Fill.HouseSimple
+                            HomeTab,
+                            PhosphorIcons.Duotone.HouseSimple,
+                            PhosphorIcons.Fill.HouseSimple
                         )
-                        TabNavigationItem(LeadsTab, PhosphorIcons.Duotone.Play, PhosphorIcons.Fill.Play)
+                        TabNavigationItem(
+                            LeadsTab, PhosphorIcons.Duotone.Play, PhosphorIcons.Fill.Play
+                        )
                         TabNavigationItem(PostTab, PhosphorIcons.Fill.Plus, PhosphorIcons.Fill.Plus)
                         TabNavigationItem(
-                            ChatTab, PhosphorIcons.Duotone.AddressBook, PhosphorIcons.Fill.AddressBook
+                            ChatTab,
+                            PhosphorIcons.Duotone.AddressBook,
+                            PhosphorIcons.Fill.AddressBook
                         )
-                        TabNavigationItem(ProfileTab, PhosphorIcons.Duotone.UserFocus, PhosphorIcons.Fill.UserFocus)
+                        TabNavigationItem(
+                            ProfileTab,
+                            PhosphorIcons.Duotone.UserFocus,
+                            PhosphorIcons.Fill.UserFocus
+                        )
                     }
                 }) { innerPadding ->
                 Box(
-                    modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()).fillMaxSize()
+                    modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(bottomStart = 21.dp, bottomEnd = 20.dp))
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
@@ -164,8 +194,33 @@ private fun RowScope.TabNavigationItem(tab: Tab, icon: ImageVector, selectedIcon
     )
 }
 
+const val apiKey: String = "dAxzpGCL8rYwfADsUnCyjfinzlA5VHO3uccdFWzoH8zam7P1SaXZgivN"
+
 val myModule = module {
-    single { SearchViewModel(NetworkApi()) }
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    coerceInputValues = true
+                    classDiscriminator = "type"
+                })
+            }
+            install(DefaultRequest) {
+                header("Authorization", apiKey)
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = "api.pexels.com"
+                }
+            }
+        }
+    }
+    single { NetApi(get()) }
+    single { NetworkApi(get()) }
+    single { SearchViewModel(get()) }
+
+    factory { HomeViewModel(get()) }
+    single { NetVideoPlayerScreenModel() }
 }
 
 fun initKoin() {
@@ -173,5 +228,7 @@ fun initKoin() {
         startKoin {
             modules(myModule)
         }
-    } catch (e: Exception) {}
+    } catch (e: Exception) {
+        println(e.message)
+    }
 }
